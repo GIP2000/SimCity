@@ -5,7 +5,7 @@ var logic = require("./logic.js");
 console.log(logic.getBoard()); 
 
 
-exports.start_graphics = (canvasDOM,document,window) => {
+exports.startGraphics = (canvasDOM,document,window) => {
 
     let canvas = document.getElementById(canvasDOM);
     canvas.width = window.innerWidth - window.innerWidth*.02;
