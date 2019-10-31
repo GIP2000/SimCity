@@ -45,14 +45,14 @@ class Tile{
     }
 
 
-    inBounds = (mouseX,mouseY) => {
+    inBounds(mouseX,mouseY){
         //returns true if mouseX and mouseY are in the bounds of the fucntion  
+        return 0; 
 
     }    
 
 }
 
-exports.init(); 
 
 
 

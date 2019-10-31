@@ -1,34 +1,95 @@
 //this will deal with the drawing
-var logic = require("./logic.js"); 
+const logic = require("./logic.js");
+const phaser = require("phaser"); 
+let game = null; 
+let zoom = 1; 
+const zoom_increment = .5; 
 
 
-console.log(logic.getBoard()); 
 
 
-exports.startGraphics = (canvasDOM,document,window) => {
+exports.startGraphics = (window,width,height) => {
 
-    let canvas = document.getElementById(canvasDOM);
-    canvas.width = window.innerWidth - window.innerWidth*.02;
-    canvas.height = window.innerHeight; 
-    let ctx = canvas.getContext("2d");
-    logic.init(canvas.width,canvas.height);
+    const config = {
+        type: Phaser.AUTO,
+        width: width - width*.02,
+        height: height,
+        
+        scene: {
+            preload: preload,
+            create: create,
+            upadte: upadte,
+        }
+    };
+    
 
-    drawBoard(logic.getBoard(),ctx); 
+    game = new Phaser.Game(config);
+    logic.init(width,height);
+     
+
+   
+    
+} 
+
+scroll = (e)=>{
+    console.log(this);
+    if (e.deltaY < 0){
+        // zoom in
+        //game.cameras.main.setZoom(2); 
+
+    } else {
+        //zoom out
+        
+    }
 
 }
 
-drawBoard = (board,ctx) => {
+
+function preload (){
+    this.load.image('logo', 'assets/Tiles/test_tile.jpg');
+}
+function create(){
+    
+
+    this.image = this.add.sprite(400,350,'logo'); 
+    let scene = this;   
+    window.addEventListener("wheel",function(e){
+        //e.preventDefault(); 
+        console.log(e); 
+
+        if (e.deltaY < 0){
+            zoom += zoom_increment; 
+            //scene.cameras.main.centerOn(e.clientX,e.clientY); 
+            scene.cameras.main.setZoom(zoom); 
+    
+        } else {
+            zoom -= zoom_increment; 
+            //scene.cameras.main.centerOn(e.clientX,e.clientY); 
+            scene.cameras.main.setZoom(zoom); 
+            //zoom out
+            
+        }
+        
+
+    });
+
+}
+
+function upadte(){
+    console.log("upadte"); 
+
+
+
+}
+
+const drawBoard = (board,ctx) => {
     let rect_width = logic.getRectWidth();
     let rect_height = logic.getRectHeight();
     
-    //let offsetY = 0; 
     for(let row of board){
-        //let offsetX = 0;
         for(let tile of row){
             ctx.rect(tile.x,tile.y,rect_width,rect_height);
-            //offsetX+=rect_width; 
         }
-        //offsetY += rect_height; 
     }
     ctx.stroke(); 
 
