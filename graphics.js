@@ -1,19 +1,21 @@
 //this will deal with the drawing
 const logic = require("./logic.js");
 const phaser = require("phaser"); 
+const zoom_and_pan = require("./graphics_lib/zoom_and_pan.js"); 
 let game = null; 
-let zoom = 1; 
-const zoom_increment = .5; 
-
-
-
+let config = null; 
 
 exports.startGraphics = (window,width,height) => {
 
-    const config = {
+    config = {
         type: Phaser.AUTO,
         width: width - width*.02,
-        height: height,
+        height: height - height*.02,
+        loader:{
+            crossOrigin: 'anonymous',
+            baseURL:"https://raw.githubusercontent.com/nazimboudeffa/assets/master/"
+        },
+
         
         scene: {
             preload: preload,
@@ -21,57 +23,42 @@ exports.startGraphics = (window,width,height) => {
             upadte: upadte,
         }
     };
-    
 
     game = new Phaser.Game(config);
     logic.init(width,height);
-     
-
    
     
 } 
 
-scroll = (e)=>{
-    console.log(this);
-    if (e.deltaY < 0){
-        // zoom in
-        //game.cameras.main.setZoom(2); 
-
-    } else {
-        //zoom out
-        
-    }
-
-}
 
 
 function preload (){
-    this.load.image('logo', 'assets/Tiles/test_tile.jpg');
+    this.load.image('tree', 'pics/hyrule.png');
 }
 function create(){
-    
+     
+    this.cameras.main.setBounds(0, 0, config.width, config.height);
+    let camera = this.cameras.main; 
+    let scene = this;
 
-    this.image = this.add.sprite(400,350,'logo'); 
-    let scene = this;   
-    window.addEventListener("wheel",function(e){
-        //e.preventDefault(); 
-        console.log(e); 
 
-        if (e.deltaY < 0){
-            zoom += zoom_increment; 
-            //scene.cameras.main.centerOn(e.clientX,e.clientY); 
-            scene.cameras.main.setZoom(zoom); 
-    
-        } else {
-            zoom -= zoom_increment; 
-            //scene.cameras.main.centerOn(e.clientX,e.clientY); 
-            scene.cameras.main.setZoom(zoom); 
-            //zoom out
-            
-        }
-        
-
+    this.image = this.add.sprite(400,350,'tree'); 
+    this.input.on("pointerdown",(pointer)=>{
+        zoom_and_pan.pointer_down(pointer); 
     });
+
+    this.input.on("pointerup",(pointer)=>{
+        zoom_and_pan.pointer_up(pointer); 
+    });
+
+    this.input.on("pointermove",(pointer)=>{
+        zoom_and_pan.pointer_move(pointer,camera);
+    });
+    
+    window.addEventListener("wheel",(e)=>{
+        zoom_and_pan.scroll(e,scene); 
+    });
+
 
 }
 
@@ -82,16 +69,4 @@ function upadte(){
 
 }
 
-const drawBoard = (board,ctx) => {
-    let rect_width = logic.getRectWidth();
-    let rect_height = logic.getRectHeight();
-    
-    for(let row of board){
-        for(let tile of row){
-            ctx.rect(tile.x,tile.y,rect_width,rect_height);
-        }
-    }
-    ctx.stroke(); 
-
-}
 

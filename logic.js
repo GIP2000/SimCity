@@ -29,6 +29,7 @@ exports.init = (width,height) => {
     let rect_height_t = Math.floor(height/column);
     rect_height = rect_height_t; 
     rect_width = rect_width_t;
+    
     board = populateBoard(rect_width,rect_height); 
 
 }
@@ -36,7 +37,6 @@ exports.init = (width,height) => {
 class Tile{
     constructor(x,y,claimed=false){
         this.claimed = claimed; 
-        this.img = new Image();
         this.type = "Unknown";
         this.x = x; 
         this.y = y; 
