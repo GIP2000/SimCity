@@ -1,10 +1,10 @@
 // this will be mostly 
 
-let row = 11; 
-let column = 11;
+let row = 30; 
+let column = row;
 let board = null; 
-let rect_width = null; 
-let rect_height = null; 
+const rect_width = 120; 
+const rect_heigth = 120; 
 
 exports.getBoard = ()=> {return board}; 
 
@@ -12,47 +12,43 @@ exports.getRectWidth = () => {return rect_width}
 
 exports.getRectHeight = () => {return rect_height}
 
-const populateBoard = (rect_width,rect_height) =>{
+const populateBoard = (game) =>{
     let board = []; 
     for(let i = 0; i<column; i++){
         board.push([]); 
         for(let j = 0; j<row; j++){
-            board[i].push(new Tile(j*rect_width,i*rect_height)); 
+            board[i].push(new Tile(j*rect_width,i*rect_heigth,game)); 
         }
     }
     return board; 
 
 }
 
-exports.init = (width,height) => {
-    let rect_width_t = Math.floor(width/row); 
-    let rect_height_t = Math.floor(height/column);
-    rect_height = rect_height_t; 
-    rect_width = rect_width_t;
-    board = populateBoard(rect_width,rect_height); 
+exports.init = (game) => {
+    populateBoard(game); 
 
 }
 
 class Tile{
-    constructor(x,y,claimed=false){
+    constructor(x,y,game,claimed=false){
         this.claimed = claimed; 
-        this.img = new Image();
         this.type = "Unknown";
         this.x = x; 
         this.y = y; 
+        this.image = game.add.sprite(this.x,this.y,"tile"); 
         
 
     }
 
 
-    inBounds = (mouseX,mouseY) => {
+    inBounds(mouseX,mouseY){
         //returns true if mouseX and mouseY are in the bounds of the fucntion  
+        return 0; 
 
     }    
 
 }
 
-exports.init(); 
 
 
 
