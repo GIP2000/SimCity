@@ -5,6 +5,7 @@ const zoom_and_pan = require("./graphics_lib/zoom_and_pan.js");
 let game = null; 
 let config = null; 
 
+
 exports.startGraphics = (window,width,height) => {
 
     config = {
@@ -13,7 +14,7 @@ exports.startGraphics = (window,width,height) => {
         height: height - height*.02,
         loader:{
             crossOrigin: 'anonymous',
-            baseURL:"https://raw.githubusercontent.com/nazimboudeffa/assets/master/"
+            baseURL:"https://raw.githubusercontent.com/GIP2000/assets/master/"
         },
 
         
@@ -25,7 +26,7 @@ exports.startGraphics = (window,width,height) => {
     };
 
     game = new Phaser.Game(config);
-    logic.init(width,height);
+    
    
     
 } 
@@ -33,16 +34,16 @@ exports.startGraphics = (window,width,height) => {
 
 
 function preload (){
-    this.load.image('tree', 'pics/hyrule.png');
+    this.load.image('tile', 'Test_tile.jpg');
 }
 function create(){
-     
+    logic.init(this); 
+
     this.cameras.main.setBounds(0, 0, config.width, config.height);
+    this.cameras.main.setZoom(zoom_and_pan.zoom); 
     let camera = this.cameras.main; 
     let scene = this;
 
-
-    this.image = this.add.sprite(400,350,'tree'); 
     this.input.on("pointerdown",(pointer)=>{
         zoom_and_pan.pointer_down(pointer); 
     });
