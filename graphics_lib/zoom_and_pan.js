@@ -6,20 +6,24 @@ const zoom_increment = .25;
 
 
 const pointer_down = (pointer)=>{
-    drag = true; 
-    px = pointer.x; 
-    py = pointer.y;
+    if(pointer.button == 0){
+        drag = true; 
+        px = pointer.x; 
+        py = pointer.y;
+    }
 }
 
 const pointer_up = (pointer)=>{
-    drag = false; 
-    px = pointer.x; 
-    py = pointer.y;
+    if(pointer.button == 0){
+        drag = false; 
+        px = pointer.x; 
+        py = pointer.y;
+    }
 
 }
 
 const pointer_move = (pointer,cam)=>{
-    if(drag){      
+    if(drag && pointer.button == 0){      
 
         cam._bounds.x += (px-pointer.x)/zoom;
         cam._bounds.y += (py-pointer.y)/zoom; 
