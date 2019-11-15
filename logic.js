@@ -1,19 +1,23 @@
 // this will be mostly 
-
+const Tiles = require("./tiles.js"); 
 let row = 30; 
 let column = row;
 let board = null; 
 let open_conatiner = null;
 let saved_container = 0; 
+let game = null; 
+let createContainer = null; 
 
 const rect_width = 120; 
 const rect_heigth = 120; 
+
+
 
 const getBoard = ()=> {return board}; 
 
 const getRectWidth = () => {return rect_width}
 
-const getRectHeight = () => {return rect_height}
+const getRectHeight = () => {return rect_heigth}
 
 const setOpencontainer = (r,c)=>{
     if(open_conatiner != null)
@@ -25,7 +29,7 @@ const removeOpenContainer = ()=>{
     if(open_conatiner != null){
         let container = board[open_conatiner.c][open_conatiner.r].container
         if(container != null){
-            if(saved_container == 1){
+            if(saved_container == 1){  // otherwise on opening container would be destoryed 
                 container.destroy(); 
                 open_conatiner = null; 
                 saved_container = 0; 
@@ -36,20 +40,24 @@ const removeOpenContainer = ()=>{
     }
 }
 
-const populateBoard = (game,createContainer) =>{
+const populateBoard = () =>{
     let board = []; 
     for(let i = 0; i<column; i++){
         board.push([]); 
         for(let j = 0; j<row; j++){
-            board[i].push(new Tile(j*rect_width,i*rect_heigth,game,createContainer)); 
+            board[i].push(new Tiles.Forest(j*rect_width,i*rect_heigth,game)); 
         }
     }
     return board; 
 
 } 
 
-const init = (game,createContainer) => {
-    board = populateBoard(game,createContainer); 
+const init = (lgame,pcreateContainer) => {
+    game = lgame; 
+    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer); 
+    createContainer = pcreateContainer
+    board = populateBoard(); 
+    
 }
 
 const destoryContainers = ()=>{
@@ -63,46 +71,27 @@ const destoryContainers = ()=>{
     }
 }
 
-class Tile{
-    constructor(x,y,game,createContainer,claimed=false){
-        this.claimed = claimed; 
-        this.type = "tile";
-        this.x = x; 
-        this.y = y; 
-        this.column = ()=>this.x/rect_width; 
-        this.row = ()=>this.y/rect_heigth; 
-        this.image = game.add.sprite(this.x,this.y,this.type).setInteractive(); 
-        this.options = [new Option("Chop Down",this),new Option("Claim",this),new Option("Build",this)];
-    
-        this.image.on("pointerdown",pointer=>{
-            if(pointer.button == 2){
-                setOpencontainer(this.column(),this.row()); 
-                this.container = createContainer(this,game,rect_width,rect_heigth);
-            }
-        });
-    }
+const replaceTile=(tile,TileType)=>{
+    //console.log(createContainer); 
+    let new_tile = new TileType(tile.x,tile.y,game); 
+    console.log(new_tile); 
+    removeOpenContainer(); 
 
-}
+    board[tile.column()][tile.row()] = new_tile; 
+
+    //console.log(board,tile.column(),tile.row()); 
 
 
-class Option{
-    constructor(name,tile,handler=null){
-        this.name = name;
-        this.tile = tile;  
-        this.handler = handler == null ? ()=>console.log(name):handler;
-    }
-}
+};
 
 
 
 module.exports = {
-    init:init,
-    getRectHeight:getRectHeight,
-    getRectWidth:getRectWidth,
-    getBoard:getBoard,
-    removeOpenContainer:removeOpenContainer
-
-
+    init,
+    getRectHeight,
+    getRectWidth,
+    getBoard,
+    removeOpenContainer,
 }
 
 

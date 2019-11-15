@@ -1,10 +1,11 @@
 //this will deal with the drawing
 const logic = require("./logic.js");
 const phaser = require("phaser"); 
+
 const zoom_and_pan = require("./graphics_lib/zoom_and_pan.js"); 
 let game = null; 
 let config = null; 
-let has_clicked_on_conatiner = false; 
+let has_clicked_on_conatiner = false; // if true will not destory container 
 
 exports.startGraphics = (window,width,height) => {
 
@@ -21,7 +22,7 @@ exports.startGraphics = (window,width,height) => {
         scene: {
             preload: preload,
             create: create,
-            upadte: upadte,
+            update: update,
         }
     };
 
@@ -30,6 +31,8 @@ exports.startGraphics = (window,width,height) => {
 
 function preload (){
     this.load.image('tile', 'Test_tile.jpg');
+    this.load.image('Forest', 'Trees.png');
+    this.load.image('Stump', 'Stumps.png');
 }
 function create(){
     logic.init(this,createContainer); 
@@ -64,8 +67,8 @@ function create(){
 
 }
 
-function upadte(){
-    console.log("upadte"); 
+function update(){
+    //console.log("upadte"); 
 }
 
 const createContainer = (tile,scene,tw,th)=>{
