@@ -54,7 +54,7 @@ const populateBoard = () =>{
 
 const init = (lgame,pcreateContainer) => {
     game = lgame; 
-    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer); 
+    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer); 
     createContainer = pcreateContainer
     board = populateBoard(); 
     
@@ -72,16 +72,12 @@ const destoryContainers = ()=>{
 }
 
 const replaceTile=(tile,TileType)=>{
-    //console.log(createContainer); 
     let new_tile = new TileType(tile.x,tile.y,game); 
-    console.log(new_tile); 
+    //console.log(new_tile); 
     removeOpenContainer(); 
+    board[tile.column()][tile.row()].image.destroy(); 
 
     board[tile.column()][tile.row()] = new_tile; 
-
-    //console.log(board,tile.column(),tile.row()); 
-
-
 };
 
 

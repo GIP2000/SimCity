@@ -33,6 +33,8 @@ function preload (){
     this.load.image('tile', 'Test_tile.jpg');
     this.load.image('Forest', 'Trees.png');
     this.load.image('Stump', 'Stumps.png');
+    this.load.image("grass",'grass.png');
+    this.load.image('SolarPanel', 'solarPV.png');
 }
 function create(){
     logic.init(this,createContainer); 
@@ -71,14 +73,15 @@ function update(){
     //console.log("upadte"); 
 }
 
-const createContainer = (tile,scene,tw,th)=>{
+const createContainer = (tile,scene,tw,th,options=null)=>{
     let left = -60; 
     let top = (-1*th);
+    options = options == null? tile.options:options;
 
     const text = scene.add.text(left,top-50,"Options",{color:"Black"}); 
     const rect = new Phaser.GameObjects.Rectangle(scene,0,top, 120, 100,0xff0000).setInteractive();
     rect.on("pointerdown",(pointer)=>{has_clicked_on_conatiner= true;})
-    const buttons = tile.options.map( (x,i) => {
+    const buttons = options.map( (x,i) => {
         let button = scene.add.text(left,(top-50)+20*(i+1),x.name,{color:"White"}).setInteractive(); 
         button.on("pointerdown",x.handler); 
         return button
