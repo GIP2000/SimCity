@@ -6,12 +6,10 @@ let board = null;
 let open_conatiner = null;
 let saved_container = 0; 
 let game = null; 
-let createContainer = null; 
+let toolbar = null; 
 
 const rect_width = 120; 
 const rect_heigth = 120; 
-
-
 
 const getBoard = ()=> {return board}; 
 
@@ -49,36 +47,30 @@ const populateBoard = () =>{
         }
     }
     return board; 
-
 } 
 
-const init = (lgame,pcreateContainer) => {
+const init = (lgame,pcreateContainer,ptoolbar) => {
     game = lgame; 
-    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer); 
-    createContainer = pcreateContainer
     board = populateBoard(); 
+    toolbar = ptoolbar; 
+    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer,toolbar.incrementMoney); 
     
 }
 
-const destoryContainers = ()=>{
-    for(row of board){
-        for(tile of row){
-            if(tile.container != null){
-                tile.container.destroy(); 
-                tile.container = null; 
-            }
-        }
-    }
-}
-
-const replaceTile=(tile,TileType)=>{
-    let new_tile = new TileType(tile.x,tile.y,game); 
-    //console.log(new_tile); 
+const replaceTile=(tile,TileType,CO2Increment=0)=>{
+    let new_tile = new TileType(tile.x,tile.y,game);  
     removeOpenContainer(); 
     board[tile.column()][tile.row()].image.destroy(); 
-
     board[tile.column()][tile.row()] = new_tile; 
+    toolbar.incrementMoney(new_tile.inital_cost);
+    toolbar.incrementCO2(CO2Increment); 
 };
+
+const updateCO2 = ()=>{
+    if(toolbar != null)
+        board.forEach(x=>x.forEach(i=>toolbar.incrementCO2( typeof i.passive_net_CO2 === "function"? i.passive_net_CO2():i.passive_net_CO2)));
+    toolbar.updateCO2Bar(); 
+}
 
 
 
@@ -88,8 +80,6 @@ module.exports = {
     getRectWidth,
     getBoard,
     removeOpenContainer,
+    updateCO2,
+    getTotal:()=>row*column
 }
-
-
-
-

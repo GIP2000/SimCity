@@ -5,4 +5,4 @@ graphics.startGraphics(window,window.innerWidth,window.innerHeight);
 
 document.oncontextmenu = function() {
     return false;
-  }
+}

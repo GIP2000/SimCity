@@ -1,11 +1,13 @@
 //this will deal with the drawing
 const logic = require("./logic.js");
 const phaser = require("phaser"); 
-
+const toolbar = require("./graphics_lib/toolbar.js"); 
 const zoom_and_pan = require("./graphics_lib/zoom_and_pan.js"); 
+
 let game = null; 
 let config = null; 
 let has_clicked_on_conatiner = false; // if true will not destory container 
+let timeStamp = null;
 
 exports.startGraphics = (window,width,height) => {
 
@@ -17,12 +19,9 @@ exports.startGraphics = (window,width,height) => {
             crossOrigin: 'anonymous',
             baseURL:"https://raw.githubusercontent.com/GIP2000/assets/master/"
         },
-
-        
         scene: {
             preload: preload,
             create: create,
-            update: update,
         }
     };
 
@@ -37,7 +36,7 @@ function preload (){
     this.load.image('SolarPanel', 'solarPV.png');
 }
 function create(){
-    logic.init(this,createContainer); 
+    logic.init(this,createContainer,toolbar); 
 
     this.cameras.main.setBounds(0, 0, config.width, config.height);
     this.cameras.main.setZoom(zoom_and_pan.zoom); 
@@ -66,29 +65,40 @@ function create(){
         zoom_and_pan.scroll(e,scene); 
     });
 
+    let new_scene = this.scene.add("ToolBar",Phaser.Scene,true); 
 
+    toolbar.init(new_scene,config.width,config.height,logic.getTotal()); 
+
+    timeStamp = this.time.addEvent({
+        delay: 1000,
+        callback: oneSecond,
+        callbackScope: scene,
+    }); 
 }
 
-function update(){
-    //console.log("upadte"); 
+function oneSecond(){
+    logic.updateCO2();  
+    this.time.addEvent({
+        delay: 1000,
+        callback: oneSecond,
+        callbackScope: this,
+    }); 
 }
 
 const createContainer = (tile,scene,tw,th,options=null)=>{
-    let left = -60; 
-    let top = (-1*th);
+    const left = -60; 
+    const top = (-1*th);
     options = options == null? tile.options:options;
 
     const text = scene.add.text(left,top-50,"Options",{color:"Black"}); 
     const rect = new Phaser.GameObjects.Rectangle(scene,0,top, 120, 100,0xff0000).setInteractive();
-    rect.on("pointerdown",(pointer)=>{has_clicked_on_conatiner= true;})
+    rect.on("pointerdown",pointer=>{has_clicked_on_conatiner = true;});
     const buttons = options.map( (x,i) => {
         let button = scene.add.text(left,(top-50)+20*(i+1),x.name,{color:"White"}).setInteractive(); 
         button.on("pointerdown",x.handler); 
         return button
     });
-    let container = scene.add.container(tile.x+60,tile.y+60,[rect,text,...buttons]); 
+    const container = scene.add.container(tile.x+60,tile.y+60,[rect,text,...buttons]); 
 
     return container; 
 }
-
-
