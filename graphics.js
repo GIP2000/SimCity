@@ -34,6 +34,12 @@ function preload (){
     this.load.image('Stump', 'Stumps.png');
     this.load.image("grass",'grass.png');
     this.load.image('SolarPanel', 'solarPV.png');
+    this.load.image("WindTurbne",'windmill.png'); 
+    this.load.image("CoalPlant",'coal.png'); 
+    this.load.image("Factory",'factory.png'); 
+    this.load.image("MeatFarm",'farmAnimal.png');
+    this.load.image("Agriculture",'plantfarm.png');
+    this.load.image("Apt",'house.png');
 }
 function create(){
     logic.init(this,createContainer,toolbar); 

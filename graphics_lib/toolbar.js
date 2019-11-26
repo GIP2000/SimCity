@@ -16,11 +16,11 @@ const init = (toolbar,width,height,total)=>{
     
     let CO2_box = scene.add.graphics(); 
     CO2_box.fillStyle(0x222222, 0.8);
-    CO2_box.fillRect(5, 0, 320, 50);
+    CO2_box.fillRect(5, 0, 320, 50); //TODO of new bar 248 x 48
     updateCO2Bar(); 
 
     let money_box = scene.add.graphics();
-    money_box.fillStyle(0xFF0000, 0.8);
+    money_box.fillStyle(0xFFFF00, 0.8);
     money_box.fillRect(500, 0, 320, 50); 
     updateMoney(); 
 

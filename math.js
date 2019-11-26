@@ -19,7 +19,7 @@ const initalCO2 = ()=>{
     return convertPpmToKg(intitalppm);
 }
 const initalMoney = ()=>{
-    return 1000;
+    return 100000000;
 }
 const initalHappiness = ()=>{
     return 1000; 

@@ -48,6 +48,7 @@ class Forest extends Tile{
     constructor(x,y,game){
         super(x,y,game,"Forest",false); 
         this.options = [new ChopTree(this)]; 
+        // this.passive_net_CO2 = -1000000; 
         this.passive_net_CO2 = -1*math.convertPerYearToPerSecond(2540.12); 
     }
 }
