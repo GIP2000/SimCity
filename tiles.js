@@ -1,4 +1,6 @@
 const math = require("./math.js");
+const stdue = 75600; 
+
 
 let game = null;
 let width = null; 
@@ -7,10 +9,11 @@ let setOpencontainer = null;
 let replaceTile = null; 
 let createContainer = null; 
 let removeOpenContainer = null;
+let incrementEnergy = null; 
 let incrementMoney = null; 
 let amountofCarCargers = 0; //TODO set this to the real number we start with prob from math.
 
-const init =(pgame,pwidth,pheight,psetOpenContainer,preplaceTile,pcreateContainer,premoveOpenContainer,pincrementMoney)=>{
+const init =(pgame,pwidth,pheight,psetOpenContainer,preplaceTile,pcreateContainer,premoveOpenContainer,pincrementMoney,pincrementEnergy)=>{
     game = pgame; 
     width = pwidth; 
     height = pheight; 
@@ -19,6 +22,7 @@ const init =(pgame,pwidth,pheight,psetOpenContainer,preplaceTile,pcreateContaine
     createContainer = pcreateContainer; 
     removeOpenContainer = premoveOpenContainer; 
     incrementMoney = pincrementMoney; 
+    incrementEnergy = pincrementEnergy; 
 }
 
 class Tile{
@@ -48,9 +52,17 @@ class Forest extends Tile{
     constructor(x,y,game){
         super(x,y,game,"Forest",false); 
         this.options = [new ChopTree(this)]; 
-        // this.passive_net_CO2 = -1000000; 
         this.passive_net_CO2 = -1*math.convertPerYearToPerSecond(2540.12); 
     }
+}
+
+class Park extends Tile{
+    constructor(x,y,game){
+        super(x,y,game,"Park",true); 
+        this.options = [new Destory(this)]; 
+        this.passive_net_CO2 = -1*math.convertPerYearToPerSecond(2540.12); 
+    }
+
 }
 
 class Stump extends Tile{
@@ -63,7 +75,7 @@ class Stump extends Tile{
 class ClaimedGrass extends Tile{
     constructor(x,y,game){
         super(x,y,game,"grass"); 
-        this.options = [new BuildPowerPlant(this),new BuildCarCharger(this),new BuildFarm(this),new BuildApt(this), new BuildFactory(this)]; 
+        this.options = [new BuildPowerPlant(this),new BuildCarCharger(this),new BuildFarm(this),new BuildApt(this), new BuildFactory(this), new BuildPark(this)]; 
     }
 }
 
@@ -84,6 +96,7 @@ class CoalPlant extends Tile{
     constructor(x,y,game){
         super(x,y,game,"CoalPlant");
         this.options = [new Destory(this)]; 
+        this.passive_net_CO2 = math.convertPerYearToPerSecond(178718.4);
     }
 }
 
@@ -139,10 +152,13 @@ class Option{
         this.name = name;
         this.tile = tile;  
         this.inital_cost = 0; 
+        this.energy_per_year = 0; 
         this.custom_handler = handler;
         this.handler = ()=>{
-            if(incrementMoney(-1*this.inital_cost))
+            if(incrementMoney(-1*this.inital_cost)){
+                incrementEnergy(this.energy_per_year); 
                 this.custom_handler(); 
+            }
         }
         this.createFolder = options =>{
             removeOpenContainer();
@@ -159,6 +175,8 @@ class Destory extends Option{
         super(`Knock Down ${tile.type}`,tile,()=>{
             if(tile instanceof ElectricCarCharger || tile instanceof GasStation){
                 amountofCarCargers--; 
+            } else if(tile instanceof CoalPlant || tile instanceof SolarPanel || tile instanceof WindTurbine){
+                incrementEnergy(tile instanceof CoalPlant ? stdue*-2:stdue*-1); 
             }
             replaceTile(tile,ClaimedGrass)
         }); 
@@ -189,6 +207,13 @@ class BuildApt extends Option{
     }
 }
 
+class BuildPark extends Option{
+    constructor(tile){
+        super("Build Park",tile,() => replaceTile(tile,Park,81283.8));
+        //this.inital_cost = 0; 
+    }
+}
+
 class BuildFactory extends Option{
     constructor(tile){
         super("Build Factory",tile,() => replaceTile(tile,Factory));
@@ -207,20 +232,25 @@ class BuildPowerPlant extends Option{
 class BuildCoalPlant extends Option{
     constructor(tile){
         super("Build Coal Plant",tile,()=>replaceTile(tile,CoalPlant)); 
+        this.energy_per_year = stdue*2;  // you need 2 for the inital population 
+        
     }
 }
 
 class BuildSolarPower extends Option{
     constructor(tile){
         super("Build Solar Power",tile,()=>replaceTile(tile,SolarPanel)); 
+        this.energy_per_year = stdue; // This is enough so that you need 4 for the inital population 
     }
 }
 class BuildWindTurbine extends Option{
     constructor(tile){
         super("Build Wind Turbine Power",tile,()=>replaceTile(tile,WindTurbine)); 
+        this.energy_per_year = stdue;// This is enough so that you need 4 for the inital population 
     }
 }
 /*End Energy */
+
 /*Start Gas Stations */
 class BuildCarCharger extends Option{
     constructor(tile){

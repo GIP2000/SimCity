@@ -5,7 +5,9 @@ let money = null;
 let happiness = null;
 let CO2_progress = null; 
 let money_progress = null; 
+let energy_progress = null; 
 let population = math.getInitalPopulation();
+let energy = 0; 
 
 const init = (toolbar,width,height,total)=>{
     math.init(total); 
@@ -23,6 +25,11 @@ const init = (toolbar,width,height,total)=>{
     money_box.fillStyle(0xFFFF00, 0.8);
     money_box.fillRect(500, 0, 320, 50); 
     updateMoney(); 
+
+    let enery_box = scene.add.graphics();
+    money_box.fillStyle(0xFFFF00, 0.8);
+    money_box.fillRect(1000, 0, 320, 50); 
+    updateEnergy(); 
 
     
 
@@ -42,6 +49,12 @@ const updateMoney=()=>{
     if (money_progress != null)
         money_progress.visible = false; 
     money_progress = scene.add.text(515,10,`$${money}`,{color:"Black"});
+}
+
+const updateEnergy =()=>{
+    if (energy_progress != null)
+        energy_progress.visible = false; 
+    energy_progress = scene.add.text(1015,10,`${energy}kwh`,{color:"Black"});
 }
 
 
@@ -67,6 +80,7 @@ const incrementMoney=inc=>{
         } 
     }
 }
+const incrementEnergy = inc=>{energy+=inc;updateEnergy();}; 
 
 module.exports = {
     init,
@@ -74,4 +88,5 @@ module.exports = {
     incrementHappiness,
     incrementMoney,
     updateCO2Bar,
+    incrementEnergy,
 }

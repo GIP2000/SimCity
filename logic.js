@@ -53,7 +53,7 @@ const init = (lgame,pcreateContainer,ptoolbar) => {
     game = lgame; 
     board = populateBoard(); 
     toolbar = ptoolbar; 
-    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer,toolbar.incrementMoney); 
+    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer,toolbar.incrementMoney,toolbar.incrementEnergy); 
     
 }
 
@@ -71,6 +71,8 @@ const updateCO2 = ()=>{
         board.forEach(x=>x.forEach(i=>toolbar.incrementCO2( typeof i.passive_net_CO2 === "function"? i.passive_net_CO2():i.passive_net_CO2)));
     toolbar.updateCO2Bar(); 
 }
+
+
 
 
 

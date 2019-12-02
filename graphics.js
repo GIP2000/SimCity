@@ -4,12 +4,13 @@ const phaser = require("phaser");
 const toolbar = require("./graphics_lib/toolbar.js"); 
 const zoom_and_pan = require("./graphics_lib/zoom_and_pan.js"); 
 
+
 let game = null; 
 let config = null; 
 let has_clicked_on_conatiner = false; // if true will not destory container 
 let timeStamp = null;
 
-exports.startGraphics = (window,width,height) => {
+exports.startGraphics = (width,height) => {
 
     config = {
         type: Phaser.AUTO,
@@ -40,6 +41,7 @@ function preload (){
     this.load.image("MeatFarm",'farmAnimal.png');
     this.load.image("Agriculture",'plantfarm.png');
     this.load.image("Apt",'house.png');
+    this.load.image("Park",'PARK.png');
 }
 function create(){
     logic.init(this,createContainer,toolbar); 

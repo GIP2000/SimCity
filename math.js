@@ -2,6 +2,10 @@
 let atmw = null; 
 let area = null; 
 
+// game speed is how many real seconds one second in the game represents 
+const game_speed = 35040000; // 876000 is way too slow we are going to need to speed shit up a lot and have the game take place over a longer period of time (theoretical time)
+
+
 const init = total=>{
     area = total; 
     atmw = 5.148e18*(area)/(1.230e11);
@@ -30,13 +34,11 @@ const getInitalPopulation = ()=>{
 }
 
 
-const convertPerYearToPerSecond = (value)=>{
-    return value/31536000; 
-}
+const convertPerYearToPerSecond = value=>(value/31536000)*game_speed; 
 
-const energyRequirments = (population)=>{
-    return population*-10800
-}
+const energyRequirments = population=>population*-10800;
+
+const housingNeed = population=>Math.ceil(population*.077); 
 
 module.exports = {
     initalCO2,
@@ -47,4 +49,6 @@ module.exports = {
     init,
     convertPerYearToPerSecond,
     getInitalPopulation,
+    energyRequirments,
+    housingNeed,
 }
