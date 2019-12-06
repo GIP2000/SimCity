@@ -30,11 +30,6 @@ const init = (toolbar,width,height,total)=>{
     money_box.fillStyle(0xFFFF00, 0.8);
     money_box.fillRect(1000, 0, 320, 50); 
     updateEnergy(); 
-
-    
-
-    
-
 }
 
 const updateCO2Bar=()=>{
@@ -82,6 +77,8 @@ const incrementMoney=inc=>{
 }
 const incrementEnergy = inc=>{energy+=inc;updateEnergy();}; 
 
+const getCO2 = ()=>CO2; 
+
 module.exports = {
     init,
     incrementCO2,
@@ -89,4 +86,5 @@ module.exports = {
     incrementMoney,
     updateCO2Bar,
     incrementEnergy,
+    getCO2,
 }

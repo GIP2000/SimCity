@@ -1,7 +1,7 @@
 // this will be mostly 
 const Tiles = require("./tiles.js"); 
-let row = 30; 
-let column = row;
+let row = 12; 
+let column = 16;
 let board = null; 
 let open_conatiner = null;
 let saved_container = 0; 
@@ -67,9 +67,17 @@ const replaceTile=(tile,TileType,CO2Increment=0)=>{
 };
 
 const updateCO2 = ()=>{
-    if(toolbar != null)
+    if(toolbar != null){
+        const inialCO2 = toolbar.getCO2(); 
+        //console.log(toolbar.getCO2()); 
         board.forEach(x=>x.forEach(i=>toolbar.incrementCO2( typeof i.passive_net_CO2 === "function"? i.passive_net_CO2():i.passive_net_CO2)));
-    toolbar.updateCO2Bar(); 
+        //console.log(toolbar.getCO2()); 
+        //console.log(toolbar.getCO2()); 
+        //console.log(`Inital CO2 = ${toolbar}`);
+        console.log(`CO2 Change = ${inialCO2-toolbar.getCO2()}`); 
+        //console.log(board); 
+    }
+        toolbar.updateCO2Bar(); 
 }
 
 
