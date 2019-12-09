@@ -8,9 +8,9 @@ const zoom_and_pan = require("./graphics_lib/zoom_and_pan.js");
 let game = null; 
 let config = null; 
 let has_clicked_on_conatiner = false; // if true will not destory container 
-let timeStamp = null;
+let document = null; 
 
-exports.startGraphics = (width,height) => {
+exports.startGraphics = (pdocument,width,height) => {
 
     config = {
         type: Phaser.AUTO,
@@ -27,6 +27,7 @@ exports.startGraphics = (width,height) => {
     };
 
     game = new Phaser.Game(config);
+    document = pdocument;
 } 
 
 function preload (){
@@ -75,7 +76,7 @@ function create(){
 
     let new_scene = this.scene.add("ToolBar",Phaser.Scene,true); 
 
-    toolbar.init(new_scene,config.width,config.height,logic.getTotal()); 
+    toolbar.init(new_scene,config.width,config.height,logic.getTotal(),document); 
 
     timeStamp = this.time.addEvent({
         delay: 1000,

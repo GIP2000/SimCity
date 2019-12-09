@@ -1,4 +1,5 @@
 const math = require("../math.js");
+const daq = require("./daq/daq.js"); 
 let scene = null; 
 let CO2 = null;
 let money = null;
@@ -9,12 +10,16 @@ let energy_progress = null;
 let population = math.getInitalPopulation();
 let energy = 0; 
 
-const init = (toolbar,width,height,total)=>{
+
+const init = (toolbar,width,height,total,document)=>{
     math.init(total); 
     money = math.initalMoney(); 
     CO2 = math.initalCO2()
     happiness = math.initalHappiness(); 
     scene = toolbar; 
+    daq.init(document)
+    daq.appendCO2Data(CO2);
+    daq.appendPpmData(math.convertKgToPpmPercentageOutOf515(CO2)); 
     
     let CO2_box = scene.add.graphics(); 
     CO2_box.fillStyle(0x222222, 0.8);
@@ -38,6 +43,8 @@ const updateCO2Bar=()=>{
     CO2_progress = scene.add.graphics(); 
     CO2_progress.fillStyle(0xffffff, 1);
     CO2_progress.fillRect(15, 10, 300 * math.convertKgToPpmPercentageOutOf515(CO2), 30);
+    daq.appendCO2Data(CO2); 
+    daq.appendPpmData(math.convertKgToPpmPercentageOutOf515(CO2)); 
 }
 
 const updateMoney=()=>{
