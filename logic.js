@@ -8,6 +8,8 @@ let saved_container = 0;
 let game = null; 
 let toolbar = null; 
 
+let cycle = 0; 
+
 const rect_width = 120; 
 const rect_heigth = 120; 
 
@@ -67,6 +69,7 @@ const replaceTile=(tile,TileType,CO2Increment=0)=>{
 };
 
 const updateCO2 = ()=>{
+    cycle++; 
     if(toolbar != null){
         const inialCO2 = toolbar.getCO2(); 
         //console.log(toolbar.getCO2()); 
@@ -77,7 +80,10 @@ const updateCO2 = ()=>{
         console.log(`CO2 Change = ${inialCO2-toolbar.getCO2()}`); 
         //console.log(board); 
     }
+        Tiles.updateTime(cycle);
+        toolbar.updateTime(cycle); 
         toolbar.updateCO2Bar(); 
+        
 }
 
 

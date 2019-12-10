@@ -95,19 +95,19 @@ function oneSecond(){
 }
 
 const createContainer = (tile,scene,tw,th,options=null)=>{
-    const left = -60; 
-    const top = (-1*th);
+    const left = -120; 
+    const top = (-2*th);
     options = options == null? tile.options:options;
 
-    const text = scene.add.text(left,top-50,"Options",{color:"Black"}); 
-    const rect = new Phaser.GameObjects.Rectangle(scene,0,top, 120, 100,0xff0000).setInteractive();
+    const text = scene.add.text(left,top-100,"Options",{color:"Black"}); 
+    const rect = new Phaser.GameObjects.Rectangle(scene,0,top, 240, 200,0xff0000).setInteractive();
     rect.on("pointerdown",pointer=>{has_clicked_on_conatiner = true;});
     const buttons = options.map( (x,i) => {
-        let button = scene.add.text(left,(top-50)+20*(i+1),x.name,{color:"White"}).setInteractive(); 
+        let button = scene.add.text(left,(top-100)+20*(i+1),x.name,{color:"White"}).setInteractive(); 
         button.on("pointerdown",x.handler); 
         return button
     });
-    const container = scene.add.container(tile.x+60,tile.y+60,[rect,text,...buttons]); 
+    const container = scene.add.container(tile.x+120,tile.y+120,[rect,text,...buttons]); 
 
     return container; 
 }

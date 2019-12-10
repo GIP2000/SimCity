@@ -12,6 +12,8 @@ let removeOpenContainer = null;
 let incrementEnergy = null; 
 let incrementMoney = null; 
 let amountofCarCargers = 0; //TODO set this to the real number we start with prob from math.
+let amountofGasStations = 0; 
+let time = 0; 
 
 const init =(pgame,pwidth,pheight,psetOpenContainer,preplaceTile,pcreateContainer,premoveOpenContainer,pincrementMoney,pincrementEnergy)=>{
     game = pgame; 
@@ -24,6 +26,8 @@ const init =(pgame,pwidth,pheight,psetOpenContainer,preplaceTile,pcreateContaine
     incrementMoney = pincrementMoney; 
     incrementEnergy = pincrementEnergy; 
 }
+
+const updateTime =t=>{time=math.getTimeInDecYear(t);console.log(time); }
 
 class Tile{
     constructor(x,y,game,type="tile",claimed=true){
@@ -104,7 +108,7 @@ class GasStation extends Tile{
     constructor(x,y,game){
         super(x,y,game,"GasStation");
         this.options = [new Destory(this)]; 
-        this.passive_net_CO2 = ()=>amountofCarCargers == 0 ?0:math.convertPerYearToPerSecond(5443)/amountofCarCargers;
+        this.passive_net_CO2 = ()=>amountofCarCargers == 0 ?0:math.floor(amountofGasStations/amountofCarCargers)*math.getPopulation(time)*(math.convertPerYearToPerSecond(5443));  //TODO fix this is false I need to account for the population in this statment
     }
 }
 
@@ -175,6 +179,8 @@ class Destory extends Option{
         super(`Knock Down ${tile.type}`,tile,()=>{
             if(tile instanceof ElectricCarCharger || tile instanceof GasStation){
                 amountofCarCargers--; 
+                if(tile instanceof GasStation)
+                    amountofGasStations--; 
             } else if(tile instanceof CoalPlant || tile instanceof SolarPanel || tile instanceof WindTurbine){
                 incrementEnergy(tile instanceof CoalPlant ? stdue*-2:stdue*-1); 
             }
@@ -262,6 +268,7 @@ class BuildGasStation extends Option{
     constructor(tile){
         super("Build Gas Station",tile,()=>{
             amountofCarCargers++; 
+            amountofGasStations++; 
             replaceTile(tile,GasStation)
         }); 
         this.inital_cost = 100000; 
@@ -302,6 +309,6 @@ class BuildVegiFarm extends Option{
 
 
 module.exports = {
-    Forest,init
+    Forest,init,updateTime
 }
 

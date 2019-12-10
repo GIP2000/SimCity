@@ -7,8 +7,8 @@ let happiness = null;
 let CO2_progress = null; 
 let money_progress = null; 
 let energy_progress = null; 
-let population = math.getInitalPopulation();
 let energy = 0; 
+let time = 0; 
 
 
 const init = (toolbar,width,height,total,document)=>{
@@ -86,6 +86,8 @@ const incrementEnergy = inc=>{energy+=inc;updateEnergy();};
 
 const getCO2 = ()=>CO2; 
 
+const updateTime =t=>{t=math.getTimeInDecYear(t);}
+
 module.exports = {
     init,
     incrementCO2,
@@ -94,4 +96,5 @@ module.exports = {
     updateCO2Bar,
     incrementEnergy,
     getCO2,
+    updateTime, 
 }
