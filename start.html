@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Start Climate Fever</title>
+    <style>
+        body{
+            background-image: url("assets/start/startbackground.png");
+            background-repeat:no-repeat;
+            background-size:cover;
+            background-color:#A3CC27
+        }
+
+        .parent {
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+        .image1 {
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+        .image2 {
+            position: absolute;
+            top: 75%;
+            left: 40%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .imgbox {
+            display: grid;
+            height: 100%;
+        }
+        .center-fit {
+            max-width: 100%;
+            max-height: 100vh;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class = "parent">
+        <img class = "image1 center-fit" src="assets/start/starttext.png">
+        <a href="index.html"><img class = "image2 " src ="assets/start/STARTBUTTON.png"></a>
+    </div>
+    <script>
+        let image2 = document.getElementsByClassName("image2");
+        let image1 = document.getElementsByClassName("image1"); 
+
+        image2.style.top = image1.style.height*.75; 
+        image2.style.left = image1.stylewidth*.4; 
+        image2.style.width = image1.style.width; 
+        image2.style.height = image1.stheight; 
+
+
+
+
+    </script>
+    
+</body>
+</html>
