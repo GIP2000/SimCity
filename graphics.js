@@ -8,13 +8,14 @@ let config = null;
 let has_clicked_on_conatiner = false; // if true will not destory container 
 let document = null; 
 let paused = false; 
+let new_scene = null; 
 
 exports.startGraphics = (pdocument,width,height) => {
 
     config = {
         type: Phaser.AUTO,
         width: width - width*.02,
-        height: height - height*.02,
+        height: height - height*.05,
         loader:{
             crossOrigin: 'anonymous',
             baseURL:"https://raw.githubusercontent.com/GIP2000/assets/master/"
@@ -47,7 +48,6 @@ function preload (){
     this.load.image("Agriculture",'plantfarm.png');
     this.load.image("Apt",'house.png');
     this.load.image("Park",'PARK.png');
-    //this.load.bitmapFont("neon_pixel-7.bmp");
 }
 function create(){
     logic.init(this,createContainer,toolbar); 
@@ -77,9 +77,10 @@ function create(){
     
     window.addEventListener("wheel",(e)=>{
         zoom_and_pan.scroll(e,scene); 
+        logic.removeOpenContainer(); 
     });
 
-    let new_scene = this.scene.add("ToolBar",Phaser.Scene,true); 
+    new_scene = this.scene.add("ToolBar",Phaser.Scene,true); 
 
     toolbar.init(new_scene,config.width,config.height,logic.getTotal(),document); 
 
@@ -91,12 +92,12 @@ function create(){
 }
 
 function oneSecond(){
-    console.log("Paused is ", paused); 
+    //console.log("Paused is ", paused); 
     if(!paused){
         logic.updateTime(); 
         logic.updateCO2();  
         logic.updateWellness();
-        logic.taxes(); 
+        logic.taxes();  
     } 
     const game_status = logic.checkGameOver(); 
     if(game_status == null){
@@ -108,20 +109,31 @@ function oneSecond(){
     }
 }
 
-const createContainer = (tile,scene,tw,th,options=null)=>{
+const createContainer = (tile,scene,tw,th,options=null,cords=null)=>{
     const left = -200; 
     const top = (-2*th);
-    options = options == null? tile.options:options;
+    let op_flag = options == null
+    options = op_flag? tile.options:options;
 
-    const text = scene.add.text(left,top-100,"Options",{color:"Black",fontFamily: 'my_font'}); 
-    const rect = new Phaser.GameObjects.Rectangle(scene,0,top, left*-2, 200,0xff0000).setInteractive();
+    const text = new_scene.add.text(left,top-100,"Options",{color:"Black",fontFamily: 'my_font'}); 
+    const rect = new Phaser.GameObjects.Rectangle(new_scene,0,top, left*-2, 200,0x234099).setInteractive();
     rect.on("pointerdown",pointer=>{has_clicked_on_conatiner = true;});
     const buttons = options.map( (x,i) => {
-        let button = scene.add.text(left,(top-100)+20*(i+1),x.name_string(),{color:"White",fontFamily: 'my_font'}).setInteractive(); 
+        let button = new_scene.add.text(left,(top-100)+20*(i+1),x.name_string(),{color:"white",fontFamily: 'my_font'}).setInteractive(); 
         button.on("pointerdown",x.handler); 
         return button
     });
-    const container = scene.add.container(tile.x+120,tile.y+120,[rect,text,...buttons]); 
+
+    //console.log(new_scene.input.activePointer,scene.input.activePointer); 
+    if(op_flag){ 
+        var x = new_scene.input.activePointer.x-left;
+        var y = new_scene.input.activePointer.y+th;
+    } else {
+        var x = cords.x;
+        var y = cords.y;
+    }
+    logic.setOpencontainer(tile.row(),tile.column(),x,y); 
+    const container = new_scene.add.container(x,y,[rect,text,...buttons]); 
 
     return container; 
 }

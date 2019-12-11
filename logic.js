@@ -13,17 +13,19 @@ let prev_time = 0;
 const rect_width = 120; 
 const rect_heigth = 120; 
 
-const getBoard = ()=> {return board}; 
+const getBoard = ()=> board; 
 
-const getRectWidth = () => {return rect_width}
+const getRectWidth = () => rect_width;
 
-const getRectHeight = () => {return rect_heigth}
+const getRectHeight = () => rect_heigth;
 
-const setOpencontainer = (r,c)=>{
+const setOpencontainer = (r,c,x,y)=>{
     if(open_conatiner != null)
         removeOpenContainer(); 
-    open_conatiner = {r:r,c:c}; 
+    open_conatiner = {r:r,c:c,x:x,y:y}; 
 }
+
+const getCords=()=>{ return {x:open_conatiner.x,y:open_conatiner.y}};
 
 const removeOpenContainer = ()=>{
     if(open_conatiner != null){
@@ -73,7 +75,7 @@ const populateBoard = () =>{
 const init = (lgame,pcreateContainer,ptoolbar) => {
     game = lgame; 
     toolbar = ptoolbar; 
-    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer,toolbar.incrementMoney,toolbar.incrementEnergy,toolbar.incrementFood,toolbar.incrementMeatFood,toolbar.incrementApt,toolbar.incrementFactory); 
+    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer,toolbar.incrementMoney,toolbar.incrementEnergy,toolbar.incrementFood,toolbar.incrementMeatFood,toolbar.incrementApt,toolbar.incrementFactory,getCords); 
     board = populateBoard(); 
     
     
@@ -144,5 +146,6 @@ module.exports = {
     checkGameOver,
     taxes,
     updateTime,
+    setOpencontainer,
     getTotal:()=>row*column
 }

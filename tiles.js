@@ -13,13 +13,14 @@ let incrementEnergy = null;
 let incrementMoney = null; 
 let incrementFood = null; 
 let incrementMeatFood = null; 
-let incrementApt = null; 
+let incrementApt = null; ``
 let incrementFactory = null; 
+let getCords = null; 
 let amountofCarCargers = 0; //TODO set this to the real number we start with prob from math.
 let amountofGasStations = 0; 
 let time = 0; 
 
-const init =(pgame,pwidth,pheight,psetOpenContainer,preplaceTile,pcreateContainer,premoveOpenContainer,pincrementMoney,pincrementEnergy,pincrementFood,pincrementMeatFood,pincrementApt,pincrementFactory)=>{
+const init =(pgame,pwidth,pheight,psetOpenContainer,preplaceTile,pcreateContainer,premoveOpenContainer,pincrementMoney,pincrementEnergy,pincrementFood,pincrementMeatFood,pincrementApt,pincrementFactory,pgetCords)=>{
     game = pgame; 
     width = pwidth; 
     height = pheight; 
@@ -33,9 +34,10 @@ const init =(pgame,pwidth,pheight,psetOpenContainer,preplaceTile,pcreateContaine
     incrementMeatFood = pincrementMeatFood; 
     incrementApt = pincrementApt; 
     incrementFactory = pincrementFactory; 
+    getCords = pgetCords; 
 }
 
-const updateTime =t=>{time=math.getTimeInDecYear(t);console.log(time); }
+const updateTime =t=>{time=math.getTimeInDecYear(t);}
 
 class Tile{
     constructor(x,y,game,type="tile",claimed=true){
@@ -52,7 +54,7 @@ class Tile{
     
         this.image.on("pointerdown",pointer=>{
             if(pointer.button == 2){
-                setOpencontainer(this.row(),this.column()); 
+                removeOpenContainer(); 
                 this.container = createContainer(this,game,width,height);
             }
         });
@@ -87,7 +89,7 @@ class Stump extends Tile{
 class ClaimedGrass extends Tile{
     constructor(x,y,game){
         super(x,y,game,"grass"); 
-        this.options = [new BuildPowerPlant(this),new BuildCarCharger(this),new BuildFarm(this),new BuildApt(this), new BuildFactory(this), new BuildPark(this)]; 
+        this.options = [new BuildPowerPlant(this)/*,new BuildCarCharger(this)*/,new BuildFarm(this),new BuildApt(this), new BuildFactory(this), new BuildPark(this)]; 
     }
 }
 
@@ -169,21 +171,22 @@ class Option{
         this.custom_handler = handler;
         this.isFolder = false; 
         this.name_string =()=>this.isFolder ?this.name:`${this.name} will cost $${numPComma(this.inital_cost)}`; 
-        this.handler = ()=>{
-            if(incrementMoney(-1*this.inital_cost)){
+        this.handler = pointer=>{
+            if(pointer.button != 2 && incrementMoney(-1*this.inital_cost)){
                 incrementEnergy(this.energy_per_year); 
                 incrementFood(this.food_per_year); 
                 this.custom_handler(); 
             }
         }
         this.createFolder = options =>{
+            let cords = getCords(); 
             removeOpenContainer();
-            setOpencontainer(this.tile.row(),this.tile.column()); 
-            this.tile.container = createContainer(this.tile,game,width,height,options);
+            //setOpencontainer(this.tile.row(),this.tile.column()); 
+            this.tile.container = createContainer(this.tile,game,width,height,options,cords);
             removeOpenContainer(); 
         }
         
-    }
+    }   
 }
 
 class Destory extends Option{

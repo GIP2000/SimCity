@@ -26,20 +26,12 @@ const appendPpmData=d=>{
 const getGameData=document=>{
 
     const ctx = document.getElementById("chart").getContext('2d');
-    //console.log(CO2data); 
 
     let myChart = new chart.Chart(ctx,{
         type:"line",
         data:{
             labels: CO2data.map((x,i)=>i),
             datasets:[
-            // {
-            //     data:CO2data,
-            //     label:"CO2",
-            //     fill:false,
-            //     borderColor: "#3e95cd",
-
-            // },
             {
                 data:ppmdata.map(x=>x*100),
                 label:"%PPM/515",
@@ -51,10 +43,7 @@ const getGameData=document=>{
 
         },
     });
-
-    
     toggleModal(); 
-    
 
 }
 
