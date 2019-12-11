@@ -3,12 +3,11 @@ const logic = require("./logic.js");
 const phaser = require("phaser"); 
 const toolbar = require("./graphics_lib/toolbar.js"); 
 const zoom_and_pan = require("./graphics_lib/zoom_and_pan.js"); 
-
-
 let game = null; 
 let config = null; 
 let has_clicked_on_conatiner = false; // if true will not destory container 
 let document = null; 
+let paused = false; 
 
 exports.startGraphics = (pdocument,width,height) => {
 
@@ -28,6 +27,11 @@ exports.startGraphics = (pdocument,width,height) => {
 
     game = new Phaser.Game(config);
     document = pdocument;
+
+    document.getElementById("pause").addEventListener("click",function(){
+        paused = !paused; 
+        this.textContent = paused ? "Play":"Pause";  
+    });
 } 
 
 function preload (){
@@ -43,6 +47,7 @@ function preload (){
     this.load.image("Agriculture",'plantfarm.png');
     this.load.image("Apt",'house.png');
     this.load.image("Park",'PARK.png');
+    //this.load.bitmapFont("neon_pixel-7.bmp");
 }
 function create(){
     logic.init(this,createContainer,toolbar); 
@@ -86,24 +91,33 @@ function create(){
 }
 
 function oneSecond(){
-    logic.updateCO2();  
-    this.time.addEvent({
-        delay: 1000,
-        callback: oneSecond,
-        callbackScope: this,
-    }); 
+    console.log("Paused is ", paused); 
+    if(!paused){
+        logic.updateTime(); 
+        logic.updateCO2();  
+        logic.updateWellness();
+        logic.taxes(); 
+    } 
+    const game_status = logic.checkGameOver(); 
+    if(game_status == null){
+        this.time.addEvent({
+            delay: 1000,
+            callback: oneSecond,
+            callbackScope: this,
+        }); 
+    }
 }
 
 const createContainer = (tile,scene,tw,th,options=null)=>{
-    const left = -120; 
+    const left = -200; 
     const top = (-2*th);
     options = options == null? tile.options:options;
 
-    const text = scene.add.text(left,top-100,"Options",{color:"Black"}); 
-    const rect = new Phaser.GameObjects.Rectangle(scene,0,top, 240, 200,0xff0000).setInteractive();
+    const text = scene.add.text(left,top-100,"Options",{color:"Black",fontFamily: 'my_font'}); 
+    const rect = new Phaser.GameObjects.Rectangle(scene,0,top, left*-2, 200,0xff0000).setInteractive();
     rect.on("pointerdown",pointer=>{has_clicked_on_conatiner = true;});
     const buttons = options.map( (x,i) => {
-        let button = scene.add.text(left,(top-100)+20*(i+1),x.name,{color:"White"}).setInteractive(); 
+        let button = scene.add.text(left,(top-100)+20*(i+1),x.name_string(),{color:"White",fontFamily: 'my_font'}).setInteractive(); 
         button.on("pointerdown",x.handler); 
         return button
     });

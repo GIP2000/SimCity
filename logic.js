@@ -1,7 +1,7 @@
 // this will be mostly 
 const Tiles = require("./tiles.js"); 
-let row = 30; 
-let column = row;
+let row = 16; 
+let column = 12;
 let board = null; 
 let open_conatiner = null;
 let saved_container = 0; 
@@ -9,7 +9,7 @@ let game = null;
 let toolbar = null; 
 
 let cycle = 0; 
-
+let prev_time = 0; 
 const rect_width = 120; 
 const rect_heigth = 120; 
 
@@ -41,11 +41,30 @@ const removeOpenContainer = ()=>{
 }
 
 const populateBoard = () =>{
-    let board = []; 
+    let board = [];
+    
+    
+    let amountCoal = toolbar.initalCoal();
+    let amountFactory = toolbar.initalFactory();
+    let amountApt = toolbar.initalApt(); 
+    let amountVegiFarm = toolbar.initalVegiFarm(); 
+    let amountMeatFarm = toolbar.initalMeatFarm(); 
+
     for(let i = 0; i<column; i++){
         board.push([]); 
         for(let j = 0; j<row; j++){
-            board[i].push(new Tiles.Forest(j*rect_width,i*rect_heigth,game)); 
+            if(amountCoal-- > 0)
+                board[i].push(new Tiles.CoalPlant(j*rect_width,i*rect_heigth,game));
+            else if(amountFactory-- > 0)
+                board[i].push(new Tiles.Factory(j*rect_width,i*rect_heigth,game));
+            else if(amountApt-- > 0)
+                board[i].push(new Tiles.Apt(j*rect_width,i*rect_heigth,game)); 
+            else if(amountVegiFarm-- > 0)
+                board[i].push(new Tiles.VegiFarm(j*rect_width,i*rect_heigth,game)); 
+            else if(amountMeatFarm-- > 0)
+                board[i].push(new Tiles.MeatFarm(j*rect_width,i*rect_heigth,game)); 
+            else
+                board[i].push(new Tiles.Forest(j*rect_width,i*rect_heigth,game));
         }
     }
     return board; 
@@ -53,9 +72,10 @@ const populateBoard = () =>{
 
 const init = (lgame,pcreateContainer,ptoolbar) => {
     game = lgame; 
-    board = populateBoard(); 
     toolbar = ptoolbar; 
-    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer,toolbar.incrementMoney,toolbar.incrementEnergy); 
+    Tiles.init(game,rect_width,rect_heigth,setOpencontainer,replaceTile,pcreateContainer,removeOpenContainer,toolbar.incrementMoney,toolbar.incrementEnergy,toolbar.incrementFood,toolbar.incrementMeatFood,toolbar.incrementApt,toolbar.incrementFactory); 
+    board = populateBoard(); 
+    
     
 }
 
@@ -69,23 +89,46 @@ const replaceTile=(tile,TileType,CO2Increment=0)=>{
 };
 
 const updateCO2 = ()=>{
-    cycle++; 
     if(toolbar != null){
-        const inialCO2 = toolbar.getCO2(); 
-        //console.log(toolbar.getCO2()); 
         board.forEach(x=>x.forEach(i=>toolbar.incrementCO2( typeof i.passive_net_CO2 === "function"? i.passive_net_CO2():i.passive_net_CO2)));
-        //console.log(toolbar.getCO2()); 
-        //console.log(toolbar.getCO2()); 
-        //console.log(`Inital CO2 = ${toolbar}`);
-        console.log(`CO2 Change = ${inialCO2-toolbar.getCO2()}`); 
-        //console.log(board); 
-    }
-        Tiles.updateTime(cycle);
-        toolbar.updateTime(cycle); 
-        toolbar.updateCO2Bar(); 
-        
+        toolbar.updateCO2Bar();
+    }   
 }
 
+const updateWellness =()=>toolbar.updateWelnessBar(); 
+
+const checkGameOver =()=>{
+    // returns True if you win returns False if you lose and returns null if the game isn't over yet
+    if(toolbar.getCO2() >= 1){
+        alert("You Lose your CO2 was way too high"); 
+        return false; 
+    }
+    if(toolbar.getTime() >= 50){
+        if(toolbar.getWellness() >=.65){
+            alert("You win");
+            return true; 
+        }
+        else{
+            alert("You Lose");
+            return false; 
+        }
+    }
+    return null; 
+}
+
+
+const taxes=()=>{
+
+    toolbar.incrementMoney((Math.floor(toolbar.getTime()) - Math.floor(prev_time))*56500*toolbar.getPop());
+
+}
+
+const updateTime=()=>{
+    cycle++; 
+    prev_time = toolbar.getTime(); 
+    Tiles.updateTime(cycle);
+    toolbar.updateTime(cycle); 
+}
 
 
 
@@ -97,5 +140,9 @@ module.exports = {
     getBoard,
     removeOpenContainer,
     updateCO2,
+    updateWellness,
+    checkGameOver,
+    taxes,
+    updateTime,
     getTotal:()=>row*column
 }
