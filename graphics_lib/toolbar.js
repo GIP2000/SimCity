@@ -71,13 +71,13 @@ const getWellness = ()=>math.getWellness(time,food,energy,apt,factory,meat_food,
 const updateMoney=()=>{
     if (money_progress != null)
         money_progress.visible = false; 
-    money_progress = scene.add.text(515,10,`$${money}`,{color:"Black"});
+    money_progress = scene.add.text(515,10,`$${numPComma(money)}`,{color:"Black",fontFamily: 'my_font'});
 }
 
 const updateEnergy =()=>{
     if (energy_progress != null)
         energy_progress.visible = false; 
-    energy_progress = scene.add.text(1015,10,`${energy}kwh`,{color:"Black"});
+    energy_progress = scene.add.text(1015,10,`${numPComma(energy)}kwh`,{color:"Black",fontFamily: 'my_font'});
 }
 
 const incrementFood=inc=>{food+=inc;}
@@ -150,6 +150,7 @@ const initalMeatFarm=()=>{
 const getPop = ()=>math.getPopulation(time); 
 
 
+const numPComma=num=>num.toString().split("").reverse().map((x,i)=>i%3 == 0 && i != 0 ? `${x},`:`${x}`).reverse().join("");
 
 module.exports = {
     init,

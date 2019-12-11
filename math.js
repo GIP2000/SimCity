@@ -21,7 +21,7 @@ const initalCO2 = ()=>{
     console.log(`Inital CO2 is `,convertPpmToKg(intitalppm) ) ;
     return convertPpmToKg(intitalppm);
 }
-const initalMoney = ()=>100000000;
+const initalMoney = ()=>1000000;
 
 const getWellness = (time,food,energy,houses,factory,meat)=>{
     const food_fraction = food/foodRequirements(time) > 1 ? 1: food/foodRequirements(time); 

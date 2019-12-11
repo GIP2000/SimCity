@@ -168,7 +168,7 @@ class Option{
         this.food_per_year = 0; 
         this.custom_handler = handler;
         this.isFolder = false; 
-        this.name_string =()=>this.isFolder ?this.name:`${this.name} will cost $${this.inital_cost}`; 
+        this.name_string =()=>this.isFolder ?this.name:`${this.name} will cost $${numPComma(this.inital_cost)}`; 
         this.handler = ()=>{
             if(incrementMoney(-1*this.inital_cost)){
                 incrementEnergy(this.energy_per_year); 
@@ -304,7 +304,7 @@ class BuildGasStation extends Option{
 
 class BuildElectricCarCharger extends Option{
     constructor(tile){
-        super("Build Gas Station",tile,()=>{
+        super("Build Electric Car Charger",tile,()=>{
             amountofCarCargers++; 
             replaceTile(tile,ElectricCarCharger)
         }); 
@@ -339,10 +339,7 @@ class BuildVegiFarm extends Option{
 }
 /*End Farm */
 
-const numPComma =num=>
-    num.toString().split("").reverse().map((x,i)=>i%3 == 0 && i != 0 ? `${x},`:`${x}`).reverse().join("");
-
-console.log(numPComma(1234567890));
+const numPComma=num=>num.toString().split("").reverse().map((x,i)=>i%3 == 0 && i != 0 ? `${x},`:`${x}`).reverse().join("");
 
 module.exports = {
     Forest,init,updateTime,CoalPlant,Apt,Factory,VegiFarm,MeatFarm

@@ -119,7 +119,7 @@ const checkGameOver =()=>{
 
 const taxes=()=>{
 
-    toolbar.incrementMoney((Math.floor(toolbar.getTime()) - Math.floor(prev_time))*56500*toolbar.getPop());
+    toolbar.incrementMoney((Math.floor(toolbar.getTime()) - Math.floor(prev_time))*10000*toolbar.getPop());
 
 }
 
