@@ -1,7 +1,7 @@
 // this will be mostly 
 const Tiles = require("./tiles.js"); 
 let row = 16; 
-let column = 12;
+let column = 9;
 let board = null; 
 let open_conatiner = null;
 let saved_container = 0; 

@@ -85,7 +85,7 @@ function create(){
     toolbar.init(new_scene,config.width,config.height,logic.getTotal(),document); 
 
     timeStamp = this.time.addEvent({
-        delay: 1000,
+        delay: 100,
         callback: oneSecond,
         callbackScope: scene,
     }); 
@@ -102,7 +102,7 @@ function oneSecond(){
     const game_status = logic.checkGameOver(); 
     if(game_status == null){
         this.time.addEvent({
-            delay: 1000,
+            delay: 100,
             callback: oneSecond,
             callbackScope: this,
         }); 
