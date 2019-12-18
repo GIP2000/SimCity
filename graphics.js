@@ -48,6 +48,12 @@ function preload (){
     this.load.image("Agriculture",'plantfarm.png');
     this.load.image("Apt",'house.png');
     this.load.image("Park",'PARK.png');
+    this.load.image("River1",'rive(1quad).png');
+    this.load.image("River2",'river(2quad).png');
+    this.load.image("River3",'river(3quad).png');
+    this.load.image("River4",'river(4quad).png');
+    this.load.image("River5",'river(h).png');
+    this.load.image("River6",'river(v).png');
 }
 function create(){
     logic.init(this,createContainer,toolbar); 

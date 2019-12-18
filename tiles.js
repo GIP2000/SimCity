@@ -89,7 +89,7 @@ class Stump extends Tile{
 class ClaimedGrass extends Tile{
     constructor(x,y,game){
         super(x,y,game,"grass"); 
-        this.options = [new BuildPowerPlant(this)/*,new BuildCarCharger(this)*/,new BuildFarm(this),new BuildApt(this), new BuildFactory(this), new BuildPark(this)]; 
+        this.options = [new BuildPowerPlant(this)/*,new BuildCarCharger(this)*/,new BuildFarm(this),new BuildApt(this), new BuildFactory(this), new BuildPark(this),new BuildRiver(this)]; 
     }
 }
 
@@ -152,6 +152,44 @@ class Factory extends Tile{
     constructor(x,y,game){
         super(x,y,game,"Factory");
         this.options = [new Destory(this)]; 
+    }
+}
+
+class River extends Tile{
+    constructor(x,y,game,t){
+        super(x,y,game,t);
+        this.options = [new Destory(this)]; 
+    }
+}
+
+class River1 extends River{
+    constructor(x,y,game){
+        super(x,y,game,"River1");
+    }
+}
+class River2 extends River{
+    constructor(x,y,game){
+        super(x,y,game,"River2");
+    }
+}
+class River3 extends River{
+    constructor(x,y,game){
+        super(x,y,game,"River3");
+    }
+}
+class River4 extends River{
+    constructor(x,y,game){
+        super(x,y,game,"River4");
+    }
+}
+class River5 extends River{
+    constructor(x,y,game){
+        super(x,y,game,"River5");
+    }
+}
+class River6 extends River{
+    constructor(x,y,game){
+        super(x,y,game,"River6");
     }
 }
 
@@ -341,6 +379,54 @@ class BuildVegiFarm extends Option{
     }
 }
 /*End Farm */
+
+class BuildRiver extends Option{
+    constructor(tile){
+        super("Build River",tile,()=> this.createFolder([new BuildRiver1(tile),new BuildRiver2(tile),new BuildRiver3(tile),new BuildRiver4(tile),new BuildRiver5(tile),new BuildRiver6(tile)]));
+        this.isFolder = true; 
+    }
+}
+
+class BuildRiver1 extends Option{
+    constructor(tile){
+        super("Build River1",tile,()=>replaceTile(tile,River1)); 
+        this.inital_cost = 0;
+    }
+}
+class BuildRiver2 extends Option{
+    constructor(tile){
+        super("Build River2",tile,()=>replaceTile(tile,River2)); 
+        this.inital_cost = 0;
+    }
+}
+
+class BuildRiver3 extends Option{
+    constructor(tile){
+        super("Build River3",tile,()=>replaceTile(tile,River3)); 
+        this.inital_cost = 0;
+    }
+}
+
+class BuildRiver4 extends Option{
+    constructor(tile){
+        super("Build River4",tile,()=>replaceTile(tile,River4)); 
+        this.inital_cost = 0;
+    }
+}
+
+class BuildRiver5 extends Option{
+    constructor(tile){
+        super("Build River5",tile,()=>replaceTile(tile,River5)); 
+        this.inital_cost = 0;
+    }
+}
+
+class BuildRiver6 extends Option{
+    constructor(tile){
+        super("Build River6",tile,()=>replaceTile(tile,River6)); 
+        this.inital_cost = 0;
+    }
+}
 
 const numPComma=num=>num.toString().split("").reverse().map((x,i)=>i%3 == 0 && i != 0 ? `${x},`:`${x}`).reverse().join("");
 

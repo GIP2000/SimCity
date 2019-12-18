@@ -147,35 +147,35 @@ const incrementFactory =inc=>{factory+=inc;}
 const getTime = ()=>time;
 
 const initalCoal=()=>{
-    const amountCoal = 28;
+    const amountCoal = 0;
     energy += stdue*2*amountCoal; 
     return amountCoal
 
 }
 
 const initalFactory=()=>{
-    const amountFactory = 18;
+    const amountFactory = 0;
     factory += amountFactory;  
     return amountFactory
 
 }
 
 const initalApt=()=>{
-    const amountApt = 8;
+    const amountApt = 0;
     apt += amountApt;  
     return amountApt
 
 }
 
 const initalVegiFarm=()=>{
-    const amountVegiFarm = 21;
+    const amountVegiFarm = 0;
     food += amountVegiFarm*8250;  
     return amountVegiFarm
 
 }
 
 const initalMeatFarm=()=>{
-    const amountMeatFarm = 24;
+    const amountMeatFarm = 0;
     food += amountMeatFarm* 237.484737485;  
     meat_food += amountMeatFarm* 237.484737485
     return amountMeatFarm
