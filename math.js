@@ -56,5 +56,6 @@ module.exports = {
     energyRequirments,
     housingNeed,
     getTimeInDecYear,
-    getWellness
+    getWellness,
+    game_speed
 }

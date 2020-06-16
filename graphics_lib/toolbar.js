@@ -27,7 +27,7 @@ const init = (toolbar,pwidth,height,total,document)=>{
     money = math.initalMoney(); 
     CO2 = math.initalCO2()
     scene = toolbar; 
-    daq.init(document)
+    daq.init(document,math.game_speed)
     daq.appendCO2Data(CO2);
     daq.appendPpmData(math.convertKgToPpmPercentageOutOf515(CO2)); 
     
@@ -74,7 +74,7 @@ const updateCO2Bar=()=>{
         CO2_progress.visible = false; // TODO make sure I do proper garbage collection here do some research on it
     CO2_progress = scene.add.graphics(); 
     CO2_progress.fillStyle(0xffffff, 1);
-    CO2_progress.fillRect(45, 10, ((width/4)-45) * 1/*math.convertKgToPpmPercentageOutOf515(CO2)*/, 30);
+    CO2_progress.fillRect(45, 10, ((width/4)-45) * math.convertKgToPpmPercentageOutOf515(CO2), 30);
     daq.appendCO2Data(CO2); 
     daq.appendPpmData(math.convertKgToPpmPercentageOutOf515(CO2)); 
 }
