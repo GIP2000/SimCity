@@ -175,6 +175,9 @@ class Option{
             if(pointer.button != 2 && incrementMoney(-1*this.inital_cost)){
                 incrementEnergy(this.energy_per_year); 
                 incrementFood(this.food_per_year); 
+                removeOpenContainer(); 
+                removeOpenContainer(); 
+                console.log("click removed"); 
                 this.custom_handler(); 
             }
         }

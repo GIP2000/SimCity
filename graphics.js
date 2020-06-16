@@ -132,6 +132,8 @@ const createContainer = (tile,scene,tw,th,options=null,cords=null)=>{
         var x = cords.x;
         var y = cords.y;
     }
+    logic.removeOpenContainer(); 
+    logic.removeOpenContainer(); 
     logic.setOpencontainer(tile.row(),tile.column(),x,y); 
     const container = new_scene.add.container(x,y,[rect,text,...buttons]); 
 
