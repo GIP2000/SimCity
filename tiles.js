@@ -175,14 +175,16 @@ class Option{
             if(pointer.button != 2 && incrementMoney(-1*this.inital_cost)){
                 incrementEnergy(this.energy_per_year); 
                 incrementFood(this.food_per_year); 
-                removeOpenContainer(); 
-                removeOpenContainer(); 
-                console.log("click removed"); 
+                if(!this.isFolder){
+                    removeOpenContainer(); 
+                    removeOpenContainer();
+                } 
                 this.custom_handler(); 
             }
         }
         this.createFolder = options =>{
             let cords = getCords(); 
+            removeOpenContainer();
             removeOpenContainer();
             //setOpencontainer(this.tile.row(),this.tile.column()); 
             this.tile.container = createContainer(this.tile,game,width,height,options,cords);
